@@ -117,7 +117,7 @@ function Set-IntuneLocalAdministrator{
     # Specify Domain
     if($EnrollmentType -like "*azure*" -or $EnrollmentType -like "*Azure*")
     {
-        $DomainType = "AzureAD"
+        $DomainType = "ccta"
         $User = $UserPrincipalName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
