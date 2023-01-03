@@ -119,13 +119,13 @@ function Set-IntuneLocalAdministrator{
     {
         $DomainType = "$env:userdomain"
         $User = $UserPrincipalName
-        $USER1 = $SamAccountName
+        $USER1 = $mailNickName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
     else {
         $DomainType = $env:userdomain
         $User = $UserPrincipalName.Split('@')[0]
-        $USER1 = $SamAccountName
+        $USER1 = $mailNickName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
 
