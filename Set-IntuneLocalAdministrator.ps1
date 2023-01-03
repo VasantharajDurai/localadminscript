@@ -117,13 +117,15 @@ function Set-IntuneLocalAdministrator{
     # Specify Domain
     if($EnrollmentType -like "*azure*" -or $EnrollmentType -like "*Azure*")
     {
-        $DomainType = $env:userdomain
+        $DomainType = "$env:userdomain"
         $User = $UserPrincipalName
+        $USER1 = $SamAccountName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
     else {
         $DomainType = $env:userdomain
         $User = $UserPrincipalName.Split('@')[0]
+        $USER1 = $SamAccountName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
 
@@ -139,7 +141,7 @@ function Set-IntuneLocalAdministrator{
         {
             # Add User to Administrators
             try {
-                Add-LocalGroupMember -Group "Administrators" -Member "$DomainType\$User" -ErrorAction Stop
+                Add-LocalGroupMember -Group "Administrators" -Member "$DomainType\$User1" -ErrorAction Stop
                 Write-Log "Successfully added $User to Administrators"
             }
             catch {
@@ -152,7 +154,7 @@ function Set-IntuneLocalAdministrator{
     else {
         # Remove User from Administrators
         try {
-            Remove-LocalGroupMember -Group "Administrators" -Member "$DomainType\$User" -ErrorAction Stop
+            Remove-LocalGroupMember -Group "Administrators" -Member "$DomainType\$User1" -ErrorAction Stop
             Write-Log "Successfully removed $User to Administrators"
         }
         catch {
