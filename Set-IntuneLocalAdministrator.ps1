@@ -2,7 +2,6 @@
 $EnrollmentType = "EnrollmentTypeChangeMe"
 $ConfirmationID = "ConfirmationCodeChangeMe"
 $UserPrincipalName = "UserPrincipalNameChangeMe"
-$mailNickName = "mailnicknamechangeme"
 $Type = "TypeChangeMe"
 $URI = "URIChangeMe"
 
@@ -120,14 +119,14 @@ function Set-IntuneLocalAdministrator{
         $DomainType = "$env:userdomain"
         $User = $UserPrincipalName
         $USER1 = $env:USERNAME
-	$USER2 = $mailNickName
+	$USER2 = (Get-CimInstance Win32_ComputerSystem).UserName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
     else {
         $DomainType = $env:userdomain
         $User = $UserPrincipalName.Split('@')[0]
         $USER1 = $env:USERNAME
-	$USER2 = $mailNickName
+	$USER2 = (Get-CimInstance Win32_ComputerSystem).UserName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
 
@@ -143,7 +142,7 @@ function Set-IntuneLocalAdministrator{
         {
             # Add User to Administrators
             try {
-                Add-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User2" -ErrorAction Stop
+                Add-LocalGroupMember -Group "Administratorer" -Member "$User2" -ErrorAction Stop
 		$AdministratorsGroup = Invoke-Expression -Command "net localgroup administrators"
                 Write-Log "Successfully added $User to Administrators"
             }
@@ -157,7 +156,7 @@ function Set-IntuneLocalAdministrator{
     else {
         # Remove User from Administrators
         try {
-            Remove-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User2" -ErrorAction Stop
+            Remove-LocalGroupMember -Group "Administratorer" -Member "$User2" -ErrorAction Stop
             Write-Log "Successfully removed $User to Administrators"
         }
         catch {
