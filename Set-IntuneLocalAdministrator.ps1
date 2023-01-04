@@ -170,6 +170,12 @@ function Set-IntuneLocalAdministrator{
 	$User2 = "$DomainType\$User1"
 Add-LocalGroupMember -Group "Administrators" -Member "$User2" -ErrorAction Stop
 
+$DomainType = "$env:userdomain"
+        $User = $UserPrincipalName
+        $USER1 = $mailNickName
+	$User2 = "$DomainType\$User1"
+Add-LocalGroupMember -Group "Administratorer" -Member "$User2" -ErrorAction Stop
+
 ## Function: Send Status to Mothership
 function Send-ELAStatusUpdate{
     [CmdletBinding()]
