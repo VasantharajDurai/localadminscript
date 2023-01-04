@@ -115,17 +115,18 @@ function Set-IntuneLocalAdministrator{
     )
 
     # Specify Domain
-    if($EnrollmentType -like "*azure*" -or $EnrollmentType -like "*Azure*")
+    if($EnrollmentType -like "*hybridAzureADJoined*" -or $EnrollmentType -like "*hybridAzureADJoined*")
+    
     {
         $DomainType = "$env:userdomain"
         $User = $UserPrincipalName
-        $USER1 = $mailNickName
+        $USER1 = $env:USERNAME
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
     else {
         $DomainType = $env:userdomain
         $User = $UserPrincipalName.Split('@')[0]
-        $USER1 = $mailNickName
+        $USER1 = $env:USERNAME
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
 
@@ -133,7 +134,7 @@ function Set-IntuneLocalAdministrator{
     {
         # Check Local Administrators Group
         $AdministratorsGroup = Invoke-Expression -Command "net localgroup Administratorer"
-        if ($AdministratorsGroup -like "*\$ShortUserName") 
+	 if ($AdministratorsGroup -like "*\$ShortUserName") 
         {
             Write-Log "User is already a local administrator" -level Warn
         }
@@ -142,6 +143,7 @@ function Set-IntuneLocalAdministrator{
             # Add User to Administrators
             try {
                 Add-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User1" -ErrorAction Stop
+		$AdministratorsGroup = Invoke-Expression -Command "net localgroup administrators"
                 Write-Log "Successfully added $User to Administrators"
             }
             catch {
@@ -164,17 +166,6 @@ function Set-IntuneLocalAdministrator{
         
     }
 }
- $DomainType = "$env:userdomain"
-        $User = $UserPrincipalName
-        $USER1 = $mailNickName
-	$User2 = "$DomainType\$User1"
-Add-LocalGroupMember -Group "Administratorer" -Member "$User2" -ErrorAction Stop
-
-$DomainType = "$env:userdomain"
-        $User = $UserPrincipalName
-        $USER1 = $mailNickName
-	$User2 = "$DomainType\$User1"
-Add-LocalGroupMember -Group "Administratorer" -Member "$User2" -ErrorAction Stop
 
 ## Function: Send Status to Mothership
 function Send-ELAStatusUpdate{
