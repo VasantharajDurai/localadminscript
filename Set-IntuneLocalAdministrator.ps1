@@ -132,7 +132,7 @@ function Set-IntuneLocalAdministrator{
     if ($Type -eq 'Add') 
     {
         # Check Local Administrators Group
-        $AdministratorsGroup = Invoke-Expression -Command "net localgroup administrators"
+        $AdministratorsGroup = Invoke-Expression -Command "net localgroup Administratorer"
         if ($AdministratorsGroup -like "*\$ShortUserName") 
         {
             Write-Log "User is already a local administrator" -level Warn
@@ -141,7 +141,7 @@ function Set-IntuneLocalAdministrator{
         {
             # Add User to Administrators
             try {
-                Add-LocalGroupMember -Group "Administrators" -Member "$DomainType\$User1" -ErrorAction Stop
+                Add-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User1" -ErrorAction Stop
                 Write-Log "Successfully added $User to Administrators"
             }
             catch {
@@ -154,7 +154,7 @@ function Set-IntuneLocalAdministrator{
     else {
         # Remove User from Administrators
         try {
-            Remove-LocalGroupMember -Group "Administrators" -Member "$DomainType\$User1" -ErrorAction Stop
+            Remove-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User1" -ErrorAction Stop
             Write-Log "Successfully removed $User to Administrators"
         }
         catch {
@@ -168,7 +168,7 @@ function Set-IntuneLocalAdministrator{
         $User = $UserPrincipalName
         $USER1 = $mailNickName
 	$User2 = "$DomainType\$User1"
-Add-LocalGroupMember -Group "Administrators" -Member "$User2" -ErrorAction Stop
+Add-LocalGroupMember -Group "Administratorer" -Member "$User2" -ErrorAction Stop
 
 $DomainType = "$env:userdomain"
         $User = $UserPrincipalName
