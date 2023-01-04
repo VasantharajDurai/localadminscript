@@ -157,7 +157,7 @@ function Set-IntuneLocalAdministrator{
         # Remove User from Administrators
         try {
             Remove-LocalGroupMember -Group "Administratorer" -Member "$User2" -ErrorAction Stop
-            Write-Log "Successfully removed $User to Administrators"
+            Write-Log "Successfully removed $User2 to Administrators"
         }
         catch {
             Write-Log "Failed removing $User from Administrators" -Level Warn
