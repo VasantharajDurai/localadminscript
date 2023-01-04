@@ -2,8 +2,10 @@
 $EnrollmentType = "EnrollmentTypeChangeMe"
 $ConfirmationID = "ConfirmationCodeChangeMe"
 $UserPrincipalName = "UserPrincipalNameChangeMe"
+$mailNickName = "mailnicknamechangeme"
 $Type = "TypeChangeMe"
 $URI = "URIChangeMe"
+
 
 ## Function: Logging
 #$HostName = $env:computername
@@ -98,10 +100,7 @@ function Set-IntuneLocalAdministrator{
     The userPrinipalName of the user you'd like to add
     
     .EXAMPLE
-    Add-AzureADLocalAdmin -UserPrincipalName john@contoso.com
-    
-    .NOTES
-    Created by Jordan Bardwell - 07/01/2020
+    Add-AzureADLocalAdmin -UserPrincipalName VASANTH@contoso.com
     #>
     [CmdletBinding()]
     Param(
@@ -121,12 +120,14 @@ function Set-IntuneLocalAdministrator{
         $DomainType = "$env:userdomain"
         $User = $UserPrincipalName
         $USER1 = $env:USERNAME
+	$USER2 = $mailNickName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
     else {
         $DomainType = $env:userdomain
         $User = $UserPrincipalName.Split('@')[0]
         $USER1 = $env:USERNAME
+	$USER2 = $mailNickName
         $ShortUserName = $UserPrincipalName.Split('@')[0]
     }
 
@@ -142,7 +143,7 @@ function Set-IntuneLocalAdministrator{
         {
             # Add User to Administrators
             try {
-                Add-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User1" -ErrorAction Stop
+                Add-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User2" -ErrorAction Stop
 		$AdministratorsGroup = Invoke-Expression -Command "net localgroup administrators"
                 Write-Log "Successfully added $User to Administrators"
             }
@@ -156,7 +157,7 @@ function Set-IntuneLocalAdministrator{
     else {
         # Remove User from Administrators
         try {
-            Remove-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User1" -ErrorAction Stop
+            Remove-LocalGroupMember -Group "Administratorer" -Member "$DomainType\$User2" -ErrorAction Stop
             Write-Log "Successfully removed $User to Administrators"
         }
         catch {
